@@ -37,6 +37,8 @@ type Config struct {
 	CertBoletoPathCa           string
 	URLTicketSantander         string
 	URLRegisterBoletoSantander string
+	URLBradesco		   		   string
+
 }
 
 var cnf Config
@@ -80,6 +82,7 @@ func Install(mockMode, devMode, disableLog, httpOnly bool) {
 		CertBoletoPathCa:           os.Getenv("CERT_BOLETO_CA"),
 		URLTicketSantander:         os.Getenv("URL_SANTANDER_TICKET"),
 		URLRegisterBoletoSantander: os.Getenv("URL_SANTANDER_REGISTER"),
+		URLBradesco: 			    os.Getenv("URL_BRADESCO"),
 	}
 }
 
