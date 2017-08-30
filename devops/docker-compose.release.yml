@@ -1,34 +1,32 @@
 version: "2"
 services:
   api:
+    container_name: "boleto-api"
     build: .
     volumes:
      - ~/boletodb/upMongo:/home/upMongo
-     - ~/boleto_ssh:/home/mundipagg/boleto_ssh
      - ~/boleto_cert:/home/mundipagg/boleto_cert
     ports:
-     - "#{CONF_EXPOSEPORT}#:3000"
+     - "9000:3000"
     environment:
-     - API_PORT=#{CONF_APIPORT}#
-     - API_VERSION=#{CONF_API_VERSION}#
-     - ENVIRONMENT=#{CONF_ENVIRONMENT}#
-     - SEQ_URL=#{CONF_SEQ_URL}#
-     - SEQ_API_KEY=#{CONF_SEQ_API_KEY}#
-     - ENABLE_REQUEST_LOG=#{CONF_ENABLE_REQUEST_LOG}#
-     - ENABLE_PRINT_REQUEST=#{CONF_ENABLE_PRINT_REQUEST}#
-     - URL_BB_REGISTER_BOLETO=#{CONF_URL_BB_REGISTER_BOLETO}#
-     - URL_BB_TOKEN=#{CONF_URL_BB_TOKEN}#
-     - MONGODB_URL=#{CONF_MONGODB_URL}#
-     - APP_URL=#{CONF_APP_URL}#
-     - BOLETO_JSON_STORE=#{CONF_BOLETO_JSON_STORE}#
-     - URL_CAIXA=#{CONF_URL_CAIXA}#
-     - URL_CITI=#{CONF_URL_CITI}#
-     - URL_CITI_BOLETO=#{CONF_URL_CITI_BOLETO}#
-     - TLS_CERT_PATH=#{CONF_TLS_CERT_PATH}#
-     - TLS_KEY_PATH=#{CONF_TLS_KEY_PATH}#
-     - CERT_BOLETO_CRT=#{CONF_CERT_BOLETO_CRT}#
-     - CERT_BOLETO_KEY=#{CONF_CERT_BOLETO_KEY}#
-     - CERT_BOLETO_CA=#{CONF_CERT_BOLETO_CA}#
+     - API_PORT=3000
+     - API_VERSION=0.0.2
+     - ENVIRONMENT=Production
+     - SEQ_URL=http://log.mundi.local
+     - SEQ_API_KEY=Wr1g3bzkuMcCyKYyy1UW
+     - ENABLE_REQUEST_LOG=false
+     - ENABLE_PRINT_REQUEST=true
+     - URL_BB_REGISTER_BOLETO=https://cobranca.bb.com.br:7101/registrarBoleto
+     - URL_BB_TOKEN=https://oauth.bb.com.br/oauth/token
+     - MONGODB_URL=172.17.153.33:27017
+     - APP_URL=https://boleto.mundipagg.com/boleto
+     - BOLETO_JSON_STORE=/home/upMongo
+     - URL_CAIXA=https://barramento.caixa.gov.br/sibar/ManutencaoCobrancaBancaria/Boleto/Externo
+     - URL_CITI=https://citigroupsoa.citigroup.com/comercioeletronico/registerboleto/RegisterBoletoSOAP
+     - URL_CITI_BOLETO=https://corporate.brazil.citibank.com/ebillpayer/jspInformaDadosConsulta.jsp
+     - CERT_BOLETO_CRT=/home/mundipagg/boleto_cert/certificate.crt
+     - CERT_BOLETO_KEY=/home/mundipagg/boleto_cert/mundi.key
+     - CERT_BOLETO_CA=/home/mundipagg/boleto_cert/ca-cert.ca
   mongodb:
     image: mongo:latest
     container_name: "mongodb"
@@ -42,3 +40,10 @@ services:
     ports:
         - 27017:27017
     command: mongod --smallfiles --logpath=/dev/null
+  nginx:
+    image: nginx:latest
+    container_name: "balance"
+    ports:
+      - "443:443"
+    volumes:
+      - ~/boleto_ssh:/etc/nginx

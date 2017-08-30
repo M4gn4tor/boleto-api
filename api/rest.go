@@ -1,9 +1,9 @@
 package api
 
 import (
-	"fmt"
+	//"fmt"
 	"net/http"
-	"os"
+	//"os"
 
 	"github.com/mundipagg/boleto-api/config"
 	"github.com/mundipagg/boleto-api/log"
@@ -23,15 +23,15 @@ func InstallRestAPI() {
 	}
 	InstallV1(router)
 	router.GET("/boleto", getBoleto)
-	if config.Get().HTTPOnly || config.Get().DevMode {
+	//if config.Get().HTTPOnly || config.Get().DevMode {
 		router.Run(config.Get().APIPort)
-	} else {
-		err := router.RunTLS(config.Get().APIPort, config.Get().TLSCertPath, config.Get().TLSKeyPath)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(-1)
-		}
-	}
+	//} else {
+	//	err := router.RunTLS(config.Get().APIPort, config.Get().TLSCertPath, config.Get().TLSKeyPath)
+	//	if err != nil {
+	//		fmt.Println(err)
+	//		os.Exit(-1)
+	//	}
+	//}
 
 }
 

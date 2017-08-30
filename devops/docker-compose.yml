@@ -7,7 +7,7 @@ services:
      - ~/boleto_ssh:/home/mundipagg/boleto_ssh
      - ~/boleto_cert:/home/mundipagg/boleto_cert
     ports:
-     - "8080:3000"
+     - "443:3000"
     environment:
      - API_PORT=3000
      - API_VERSION=0.0.1
